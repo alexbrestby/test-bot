@@ -1,6 +1,7 @@
 require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = process.env.TOKEN;
@@ -9,6 +10,7 @@ const port = 3000;
 
 // Create express server
 const app = express();
+const jsonParser = bodyParser.json()
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token);
@@ -17,7 +19,8 @@ bot.setWebHook(`${url}/bot`,)
 
 app.use(express.json());
 app.post('/bot', async (req, res) => {
-  console.log(res);
+  const response = await req.body;
+  console.log(response.message);
 })
 
 app.listen(port, () => {
