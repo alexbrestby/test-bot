@@ -10,17 +10,19 @@ const port = 3000;
 
 // Create express server
 const app = express();
-const jsonParser = bodyParser.json()
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token);
-bot.setWebHook(`${url}/bot`,)
+bot.setWebHook(`${url}/bot`,
+  { cetificate: '/etc/letsencrypt/live/bot.leoniuk.dev/cert.pem' },
+);
 
 
 app.use(express.json());
-app.post('/bot', async (req, res) => {
-  const response = await req.body;
-  console.log(response.message);
+app.post(`/bot`, async (req, res) => {
+  const body = await req.body;
+  bot.processUpdate(body);
+  res.end();
 })
 
 app.listen(port, () => {
